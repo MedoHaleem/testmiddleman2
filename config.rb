@@ -5,6 +5,8 @@ page '/*.txt', layout: false
 helpers do
 end
 
+activate :dato, token: ENV.fetch('DATO_API_TOKEN'), live_reload: true
+
 activate :external_pipeline,
   name: :webpack,
   command: build? ? "yarn run build" : "yarn run dev",
