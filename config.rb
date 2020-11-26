@@ -37,6 +37,12 @@ page '/*.txt', layout: false
 #   end
 # end
 
+activate :external_pipeline,
+  name: :webpack,
+  command: build? ? "yarn run build" : "yarn run dev",
+  source: ".tmp/dist",
+  latency: 1
+
 # Build-specific configuration
 # https://middlemanapp.com/advanced/configuration/#environment-specific-settings
 
