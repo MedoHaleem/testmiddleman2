@@ -14,9 +14,9 @@ const extractMiniCss = new MiniCssExtractPlugin({
 module.exports = {
   entry: {
     application: './source/javascripts/index.js',
-    theme_1: './source/stylesheets/_theme-1.sass',
-    theme_2: './source/stylesheets/_theme-2.sass',
-    theme_3: './source/stylesheets/_theme-3.sass'
+    theme_1: './source/stylesheets/theme-1/_application.sass',
+    theme_2: './source/stylesheets/theme-2/_application.sass',
+    theme_3: './source/stylesheets/theme-3/_application.sass'
   },
   resolve: {
     modules: [
