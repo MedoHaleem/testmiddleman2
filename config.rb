@@ -3,6 +3,9 @@ page '/*.json', layout: false
 page '/*.txt', layout: false
 
 helpers do
+  def css_style_name
+    dato.theme_setting.name.gsub("-", "_")
+  end
 end
 
 activate :dato, token: ENV.fetch('DATO_API_TOKEN'), live_reload: true
