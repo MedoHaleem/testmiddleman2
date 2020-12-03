@@ -9,5 +9,21 @@ html
     = stylesheet_link_tag css_style_name
 
   body
-    = yield
+    .canvas
+      .canvas__main
+        .nav
+          .nav__left
+            .nav__logo
+              = image_tag "https://via.placeholder.com/320x100"
+          .nav__right
+            .nav__menu
+              .nav__menu__item
+                a.nav__menu__link href="/" = "Italiano"
+              .nav__menu__item
+                a.nav__menu__link href="/en" = "English"
+              .nav__menu__item
+                a.nav__menu__link href="/de" = "Deutch"
+
+        main.wrap
+          = yield
     = javascript_include_tag "index"
