@@ -55,10 +55,18 @@ configure :build do
   end
 end
 
+def wine_list
+  data.products.wines
+end
+
 AVAILABLE_LOCALES.each do |locale|
   prefix = locale == MAIN_LOCALE ? "" : "/#{locale}"
 
   proxy "#{prefix}/index.html",
         "/localizable/index.html",
         locale: locale
+
+  wine_list.each do |wine|
+    proxy "#{prefix}/products/#{wine.name.parameterize}.html", "/localizable/product.html", locals: {wine: wine}
+  end
 end
