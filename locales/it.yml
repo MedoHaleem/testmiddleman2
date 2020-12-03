@@ -1,0 +1,8 @@
+---
+it:
+  it: "Italiano"
+  en: "English"
+  de: "Deutch"
+  product_basepath: "prodotti"
+  hero_title: "Pagina principale"
+  hero_text: "Testo principale"

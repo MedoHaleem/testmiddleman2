@@ -1,0 +1,19 @@
+---
+title: Welcome to Middleman
+---
+.hero
+  .hero__body
+    .hero__body__inner
+      .hero__heading
+        h1 = t(:hero_title)
+      .hero__text
+        p = t(:hero_text)
+
+.grid
+  - wine_list.each do |wine|
+    .grid__item.width-4-12
+      .card
+        .card__header
+          h4 = wine.name
+        .card__footer
+          = link_to "Mostra scheda", wine_path(wine, locale)

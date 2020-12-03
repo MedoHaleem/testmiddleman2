@@ -9,5 +9,19 @@ html
     = stylesheet_link_tag css_style_name
 
   body
-    = yield
+    .canvas
+      .canvas__main
+        .nav
+          .nav__left
+            .nav__logo
+              = link_to home_path(locale) do
+                = image_tag "https://via.placeholder.com/320x100"
+          .nav__right
+            .nav__menu
+              - urls.each do |locale, url|
+                .nav__menu__item
+                  = link_to t(locale), url, class: "nav__menu__link"
+
+        main.wrap
+          = yield
     = javascript_include_tag "index"

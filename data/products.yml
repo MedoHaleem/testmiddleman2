@@ -1,0 +1,4 @@
+wines:
+  - name: "Vino rosso"
+  - name: "Vino bianco"
+  - name: "Vino rosato"
