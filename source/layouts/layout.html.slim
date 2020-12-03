@@ -17,12 +17,9 @@ html
               = image_tag "https://via.placeholder.com/320x100"
           .nav__right
             .nav__menu
-              .nav__menu__item
-                a.nav__menu__link href="/" = "Italiano"
-              .nav__menu__item
-                a.nav__menu__link href="/en" = "English"
-              .nav__menu__item
-                a.nav__menu__link href="/de" = "Deutch"
+              - urls.each do |locale, url|
+                .nav__menu__item
+                  = link_to t(locale), url, class: "nav__menu__link"
 
         main.wrap
           = yield

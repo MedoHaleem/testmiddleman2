@@ -3,7 +3,7 @@ page '/*.json', layout: false
 page '/*.txt', layout: false
 
 MAIN_LOCALE = :it
-AVAILABLE_LOCALES = [:de, :en, :it]
+AVAILABLE_LOCALES = [:it, :en, :de]
 
 ignore '/localizable/*'
 
@@ -59,14 +59,37 @@ def wine_list
   data.products.wines
 end
 
-AVAILABLE_LOCALES.each do |locale|
+def locale_prefix(locale)
   prefix = locale == MAIN_LOCALE ? "" : "/#{locale}"
+end
 
-  proxy "#{prefix}/index.html",
+def wine_paths(wine)
+  AVAILABLE_LOCALES.each.with_object({}) do |locale, acc|
+    I18n.with_locale(locale) do
+      acc[locale] = [
+        locale_prefix(locale),
+        I18n.t(:product_basepath),
+        "#{wine.name.parameterize}.html"
+      ].join("/")
+    end
+  end
+end
+
+AVAILABLE_LOCALES.each do |locale|
+  prefix = locale_prefix(locale)
+  localized_home_paths = AVAILABLE_LOCALES.each.with_object({}) do |locale, acc|
+    acc[locale] = "#{locale_prefix(locale)}/index.html"
+  end
+
+  proxy localized_home_paths[locale],
         "/localizable/index.html",
-        locale: locale
+        locale: locale,
+        locals: {urls: localized_home_paths}
 
   wine_list.each do |wine|
-    proxy "#{prefix}/products/#{wine.name.parameterize}.html", "/localizable/product.html", locals: {wine: wine}
+    urls = wine_paths(wine)
+    proxy urls[locale],
+          "/localizable/product.html",
+          locals: {wine: wine, urls: urls}
   end
 end
