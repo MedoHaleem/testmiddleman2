@@ -2,33 +2,54 @@ page '/*.xml', layout: false
 page '/*.json', layout: false
 page '/*.txt', layout: false
 
-MAIN_LOCALE = :it
 AVAILABLE_LOCALES = [:it, :en, :de]
+MAIN_LOCALE = AVAILABLE_LOCALES.first
 
 ignore '/localizable/*'
 
+module SharedMethods
+  def wine_list
+    data.products.wines
+  end
+
+  def locale_prefix(locale)
+    prefix = locale == MAIN_LOCALE ? "" : "/#{locale}"
+  end
+
+  def wine_paths(wine)
+    AVAILABLE_LOCALES.each.with_object({}) do |locale, acc|
+      I18n.with_locale(locale) do
+        acc[locale] = [
+          locale_prefix(locale),
+          I18n.t(:product_basepath),
+          "#{wine.name.parameterize}.html"
+        ].join("/")
+      end
+    end
+  end
+
+  def wine_path(wine, locale)
+    wine_paths(wine)[locale]
+  end
+
+  def home_paths
+    AVAILABLE_LOCALES.each.with_object({}) do |locale, acc|
+      acc[locale] = "#{locale_prefix(locale)}/index.html"
+    end
+  end
+
+  def home_path(locale)
+    home_paths[locale]
+  end
+end
+
+include SharedMethods
+
 helpers do
+  include SharedMethods
+
   def t(key, options = {})
     I18n.t(key, **options)
-  end
-
-  def path(url, options = {})
-    lang = options[:lang] || I18n.locale.to_s
-
-    if lang.to_s == MAIN_LOCALE
-      prefix = ''
-    else
-      prefix = "/#{lang}"
-    end
-
-    prefix + "/" + clean_from_i18n(url)
-  end
-
-  def clean_from_i18n(url)
-    parts = url.split('/').select { |p| p && p.size > 0 }
-    parts.shift if langs.map(&:to_s).include?(parts[0])
-
-    parts.join("/")
   end
 
   def css_style_name
@@ -55,36 +76,11 @@ configure :build do
   end
 end
 
-def wine_list
-  data.products.wines
-end
-
-def locale_prefix(locale)
-  prefix = locale == MAIN_LOCALE ? "" : "/#{locale}"
-end
-
-def wine_paths(wine)
-  AVAILABLE_LOCALES.each.with_object({}) do |locale, acc|
-    I18n.with_locale(locale) do
-      acc[locale] = [
-        locale_prefix(locale),
-        I18n.t(:product_basepath),
-        "#{wine.name.parameterize}.html"
-      ].join("/")
-    end
-  end
-end
-
 AVAILABLE_LOCALES.each do |locale|
-  prefix = locale_prefix(locale)
-  localized_home_paths = AVAILABLE_LOCALES.each.with_object({}) do |locale, acc|
-    acc[locale] = "#{locale_prefix(locale)}/index.html"
-  end
-
-  proxy localized_home_paths[locale],
+  proxy home_paths[locale],
         "/localizable/index.html",
         locale: locale,
-        locals: {urls: localized_home_paths}
+        locals: {urls: home_paths}
 
   wine_list.each do |wine|
     urls = wine_paths(wine)

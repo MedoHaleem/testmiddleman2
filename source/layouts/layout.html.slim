@@ -14,7 +14,8 @@ html
         .nav
           .nav__left
             .nav__logo
-              = image_tag "https://via.placeholder.com/320x100"
+              = link_to home_path(locale) do
+                = image_tag "https://via.placeholder.com/320x100"
           .nav__right
             .nav__menu
               - urls.each do |locale, url|
