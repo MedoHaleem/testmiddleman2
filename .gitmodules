@@ -1,0 +1,3 @@
+[submodule "checkout"]
+	path = checkout
+	url = git@github.com:leanpanda-com/commercelayer-checkout.git
