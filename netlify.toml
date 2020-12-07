@@ -1,0 +1,8 @@
+[[redirects]]
+  from = "/checkout/*"
+  to = "/checkout/index.html"
+  status = 200
+[[headers]]
+  for = "/*"
+    [headers.values]
+    Access-Control-Allow-Origin = "*"
