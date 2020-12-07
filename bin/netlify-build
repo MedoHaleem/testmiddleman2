@@ -1,0 +1,11 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+yarn
+bundle
+middleman build
+
+# Build checkout after Middleman, otherwise the Middleman build
+# "cleans up" the extraneous checkout files
+(cd checkout && yarn && yarn build)
